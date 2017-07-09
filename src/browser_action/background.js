@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", function() {
     var searchResults = document.getElementById("searchResults");
 
     var playlistRaw = null;
-    var playlist = [];
+    var playlist = localStorage.getItem("playlist") ? JSON.parse(localStorage.getItem("playlist")) : [];
+    var lastVideoId = localStorage.getItem("lastVideoId") ? localStorage.getItem("lastVideoId") : "";
 
     var setPlayPauseBtnText = function () {
       switch (player.getPlayerState()) {
@@ -65,6 +66,11 @@ document.addEventListener("DOMContentLoaded", function() {
         var li = document.createElement("li");
         li.innerText = item.title;
         li.videoId = item.videoId;
+
+        if (item.videoId == lastVideoId) {
+          li.className = "active";
+        }
+
         searchResults.appendChild(li);
       }
     }
@@ -74,13 +80,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
       clearPlaylist();
 
-      //display loader probably
-      for (var x = 0; x < playlistRaw.length; x++) {
-        var videoId = playlistRaw[x];
-        loadVideoIdInfo(videoId, function(info) {
-          playlist.push(info)
-          reloadPlaylist();
-        });
+      if (playlistRaw) {
+        //display loader probably
+        for (var x = 0; x < playlistRaw.length; x++) {
+          var videoId = playlistRaw[x];
+          loadVideoIdInfo(videoId, function(info) {
+            playlist.push(info)
+            localStorage.setItem("playlist", JSON.stringify(playlist));
+            reloadPlaylist();
+          });
+        }
       }
     }
 
@@ -133,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (e.keyCode == 13) {
         playlistRaw = null;
         playlist = [];
+        localStorage.setItem('playlist', JSON.stringify(playlist));
 
         player.cuePlaylist({
           listType: "search",
@@ -149,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       e.target.className = "active";
       player.loadVideoById(e.target.videoId);
+      localStorage.setItem("lastVideoId", e.target.videoId);
     });
   }
 });

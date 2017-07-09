@@ -12,6 +12,7 @@
 //    sendResponse();
 //  });
 
+var lastVideoId = localStorage.getItem("lastVideoId") ? localStorage.getItem("lastVideoId") : "";
 document.addEventListener('DOMContentLoaded', function(e){
   // 2. This code loads the IFrame Player API code asynchronously.
   var tag = document.createElement('script');
@@ -26,10 +27,11 @@ document.addEventListener('DOMContentLoaded', function(e){
 
 var player;
 function onYouTubeIframeAPIReady() {
+  var videoId = lastVideoId ? lastVideoId : "Zoie5N1B0vI";
   player = new YT.Player('player', {
     height: '390',
     width: '640',
-    videoId: 'Zoie5N1B0vI',
+    videoId: videoId,
     events: {
       'onReady': onPlayerReady,
       'onStateChange': onPlayerStateChange
@@ -40,6 +42,7 @@ function onYouTubeIframeAPIReady() {
 // 4. The API will call this function when the video player is ready.
 function onPlayerReady(event) {
   event.target.playVideo();
+  event.target.pauseVideo();
 }
 
 // 5. The API calls this function when the player's state changes.
