@@ -1,0 +1,28 @@
+body {
+  width: 400px;
+}
+
+div.row {
+  width: 100%;
+}
+
+div.row input, div.row ul, #searchResults li {
+  width: 100%;
+}
+
+#searchResults {
+  list-style: none;
+}
+
+#searchResults li {
+  padding: 5px 2px;
+}
+
+#searchResults li:hover {
+  cursor: pointer;
+  background-color: #d5dbe5;
+}
+
+#searchResults li.active {
+  background-color: #93b9f9;
+}
